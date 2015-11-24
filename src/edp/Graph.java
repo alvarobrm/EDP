@@ -5,6 +5,8 @@
  */
 package edp;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Alvaro Berrocal Martin - URJC
@@ -13,6 +15,7 @@ public class Graph {
     private int [][]  adjacent; 
     private int nodes;
     private boolean empty;
+    final private  int MAX =100000;
     
     
     
@@ -21,7 +24,7 @@ public class Graph {
         adjacent = new int [nodes][nodes];
         for (int i=0; i<nodes; i++){
             for (int j=0; j<nodes; j++){
-                adjacent [i][j] = 0;
+                adjacent [i][j] = MAX;
             }
         }
         empty=true;
@@ -63,4 +66,23 @@ public class Graph {
         return empty;
     }
     
+    
+    public int[] neighbors(int v){
+        ArrayList <Integer> l= new ArrayList <>();
+        for (int i =0; i<nodes ;i++){
+           int aux =adjacent [v][i];
+           if (aux!=MAX)
+               l.add(i);
+       }
+        int [] n = new int [l.size()];
+        
+        for (int i=0 ; i< l.size();i++){
+            n[i]=l.get(i);
+        }
+        return n;
+    }
+    
+    public int getWeight(int v1, int v2){
+       return adjacent [v1][v2];
+    }
 }

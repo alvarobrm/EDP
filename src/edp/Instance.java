@@ -25,6 +25,32 @@ public class Instance {
         this.ReadFile();
         
     }
+
+    public File getFileGraph() {
+        return fileGraph;
+    }
+
+    public Graph getG() {
+        return g;
+    }
+
+    public String getNameFile() {
+        return nameFile;
+    }
+
+    public ArrayList<int[]> getNodeMatrix() {
+        return nodeMatrix;
+    }
+
+    public void setG(Graph g) {
+        this.g = g;
+    }
+
+    public void setNodeMatrix(ArrayList<int[]> nodeMatrix) {
+        this.nodeMatrix = nodeMatrix;
+    }
+    
+    
     
     public void ReadFile() {
  
@@ -69,6 +95,7 @@ public class Instance {
                 int i = Integer.parseInt(this.deleteSpaces(p[0]));
                 int j = Integer.parseInt(this.deleteSpaces(p[1]));
                 ad [i][j]=1;
+                ad [j][i]=1;
             }
             
         } catch (Exception e) {
@@ -89,9 +116,7 @@ public class Instance {
     }
 
 
-    public static void main(String[] args) {
-        Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
-    }
+    
     
     
    
