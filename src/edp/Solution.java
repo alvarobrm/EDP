@@ -36,7 +36,7 @@ public class Solution {
         costes[ini]=0;
         
         // marcar los n-1 vertices
-        
+        ArrayList <Integer> l = new ArrayList<> ();
         for (int i=0; i<n;i++){
             int v = minimo(n, visitados, costes); //seleciona el vertice no amrcado de menor disctancia
             
@@ -48,13 +48,14 @@ public class Solution {
                     if((costes[v]+matrix[v][w]< costes[w])){
                         costes[w]= costes[v]+matrix[v][w];
                         ultimo[w]=v;
+                        
                     }    
                 }
             }
         }
         for (int i=0;i<n;i++)
             System.out.println("Costo minimo a "+i+": "+costes[i]);
-        return costes;
+        return ultimo;
         
     }
     
@@ -90,7 +91,7 @@ public class Solution {
     public static void main(String[] args) {
         Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
         Solution s= new Solution(i);
-        s.camino(s.Dijkstra(1, 20), 1, 24);
+        s.camino(s.Dijkstra(24, 20), 24, 10);
     }
         
         
