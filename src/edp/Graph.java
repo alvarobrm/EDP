@@ -7,7 +7,7 @@ package edp;
 
 /**
  *
- * @author alvar
+ * @author Alvaro Berrocal Martin - URJC
  */
 public class Graph {
     private int [][]  adjacent; 
