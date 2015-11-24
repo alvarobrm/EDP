@@ -18,7 +18,7 @@ public class Solution {
     }
     
   
-    public int[] Dijkstra(int ini, int end){
+    public int[] Dijkstra(int ini){
        // valores iniciales
         int n = i.getG().getNodes();
         
@@ -53,15 +53,16 @@ public class Solution {
                 }
             }
         }
-        for (int i=0;i<n;i++)
-            System.out.println("Costo minimo a "+i+": "+costes[i]);
+        /*for (int i=0;i<n;i++)
+            System.out.println("Costo minimo a "+i+": "+costes[i]);*/
         return ultimo;
         
     }
     
     public void camino (int[] c, int s, int e){
         if (c[e]==100000){
-            System.out.println("Nodo no alcanzable");
+            System.out.println("Ruta entre el vertice "+s+" y el vertice "+e+":");
+            System.out.println("No alcanzable");
         }else{
             final ArrayList path = new ArrayList();
             int x = e;
@@ -71,6 +72,7 @@ public class Solution {
             }
         
             path.add("Vertice "+x);
+            System.out.println("Ruta entre el vertice "+s+" y el vertice "+e+":");
             System.out.println(path);
         }
         
@@ -91,7 +93,9 @@ public class Solution {
     public static void main(String[] args) {
         Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
         Solution s= new Solution(i);
-        s.camino(s.Dijkstra(24, 20), 24, 10);
+        
+        int[] rute = i.getNodeMatrix().get(0);
+        s.camino(s.Dijkstra(rute[0]), rute[0], rute[1]);
     }
         
         
