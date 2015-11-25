@@ -18,7 +18,7 @@ public class Solution {
     }
     
   
-    public int[] Dijkstra(int ini, int end){
+    public ArrayList<Integer> Dijkstra(int ini, int end){
        // valores iniciales
         int n = i.getG().getNodes();
         
@@ -34,15 +34,16 @@ public class Solution {
         
         visitados[ini]=true;
         costes[ini]=0;
-        
+        ArrayList<Integer> c =new ArrayList <>();
         // marcar los n-1 vertices
+        c.add(ini);
         
         for (int i=0; i<n;i++){
             int v = minimo(n, visitados, costes); //seleciona el vertice no amrcado de menor disctancia
             
             visitados[v]=true;
-            
-            //actualiza la distancia de vertices no marcados
+            c.add(v);
+         //actualiza la distancia de vertices no marcados
             for (int w=0;w<n;w++){
                 if (!visitados[w]){
                     if((costes[v]+matrix[v][w]< costes[w])){
@@ -51,10 +52,13 @@ public class Solution {
                     }    
                 }
             }
+            if (v== end)
+                break;
         }
         for (int i=0;i<n;i++)
             System.out.println("Costo minimo a "+i+": "+costes[i]);
-        return costes;
+        return c;
+                
         
     }
     
@@ -90,7 +94,8 @@ public class Solution {
     public static void main(String[] args) {
         Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
         Solution s= new Solution(i);
-        s.camino(s.Dijkstra(1, 20), 1, 24);
+        ArrayList <Integer> cam = s.Dijkstra(1, 5);
+        System.out.println(cam);
     }
         
         
