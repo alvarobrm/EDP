@@ -24,6 +24,7 @@ public class EDP {
         for (int j=0; j< i.getNodeMatrix().size();j++  ){
             del=Dijkstra.Dijkstra(i.getNodeMatrix().get(j) [0],i.getNodeMatrix().get(j) [1], i.getG().getAdjacent(), i, s);
             System.out.println(del);
+            s.addRoute(del);
             i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
         }
         System.out.println(s.toString());
