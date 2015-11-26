@@ -18,11 +18,8 @@ public class Solution {
     }
     
   
-<<<<<<< HEAD
-    public ArrayList<Integer> Dijkstra(int ini, int end){
-=======
+
     public ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m){
->>>>>>> dev
        // valores iniciales
         int n = i.getG().getNodes();
         
@@ -38,33 +35,7 @@ public class Solution {
         
         visitados[ini]=true;
         costes[ini]=0;
-<<<<<<< HEAD
-        ArrayList<Integer> c =new ArrayList <>();
-        // marcar los n-1 vertices
-        c.add(ini);
-        
-        for (int i=0; i<n;i++){
-            int v = minimo(n, visitados, costes); //seleciona el vertice no amrcado de menor disctancia
-            
-            visitados[v]=true;
-            c.add(v);
-         //actualiza la distancia de vertices no marcados
-            for (int w=0;w<n;w++){
-                if (!visitados[w]){
-                    if((costes[v]+matrix[v][w]< costes[w])){
-                        costes[w]= costes[v]+matrix[v][w];
-                        ultimo[w]=v;
-                    }    
-                }
-            }
-            if (v== end)
-                break;
-        }
-        for (int i=0;i<n;i++)
-            System.out.println("Costo minimo a "+i+": "+costes[i]);
-        return c;
-                
-=======
+
         ultimo[ini]=0;
         
         // marcar los n-1 vertices
@@ -103,8 +74,7 @@ public class Solution {
         ArrayList<Integer> del = new ArrayList<>();
         imprimirCaminos (ultimo, ini,fin,  costes, del);
         return del;
->>>>>>> dev
-        
+
     }
     
     private static void imprimirCaminos (int[] preds, int origen, int dest, int[] distancias, ArrayList<Integer> del) {
@@ -180,10 +150,6 @@ public class Solution {
     public static void main(String[] args) {
         Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
         Solution s= new Solution(i);
-<<<<<<< HEAD
-        ArrayList <Integer> cam = s.Dijkstra(1, 5);
-        System.out.println(cam);
-=======
         ArrayList<int[]> deleteEdges = new ArrayList<>();
         int[][] matrix = i.getG().getAdjacent();
         ArrayList<Integer> del; 
@@ -209,7 +175,7 @@ public class Solution {
         }*/
         
         
->>>>>>> dev
+
     }
         
         
