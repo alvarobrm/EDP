@@ -6,6 +6,7 @@
 package edp;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -23,11 +24,16 @@ public class EDP {
         ArrayList<Integer> del; 
         for (int j=0; j< i.getNodeMatrix().size();j++  ){
             del=Dijkstra.Dijkstra(i.getNodeMatrix().get(j) [0],i.getNodeMatrix().get(j) [1], i.getG().getAdjacent(), i, s);
-            System.out.println(del);
             s.addRoute(del);
             i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
         }
         System.out.println(s.toString());
+        
+        System.out.println("¿Desea ver las rutas?s/n");
+        Scanner scan = new Scanner (System.in);
+        String op=scan.nextLine();
+        if (op.equals("s"))
+           System.out.println(s.routesToString());
     }
     
 }

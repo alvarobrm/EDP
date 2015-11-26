@@ -63,6 +63,17 @@ public class Solution {
         return s;
     }
     
+    public String routesToString (){
+        String s="";
+        for (int i = 0; i < routes.size(); i++){
+            if (routes.get(i).size()==0)
+                s=s+"Camino no alcanzable\n";
+            else
+                s=s+routes.get(i).toString()+"\n";
+        }
+        return s;
+    }
+    
     
     
   

@@ -71,9 +71,7 @@ public class Dijkstra {
     }
     
     private static void imprimirCaminos (int[] preds, int origen, int dest, int[] distancias, ArrayList<Integer> del, Solution s) {
-         System.out.print("Ruta entre el vertice "+origen+" y el vertice "+dest+": ");
          if (distancias[dest]>=100000||distancias[dest]<0){ /*valor tomado como infinito*/
-            System.out.print ("No alcanzable");
             s.addNotConn();
          }
          else{
