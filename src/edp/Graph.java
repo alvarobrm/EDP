@@ -85,4 +85,29 @@ public class Graph {
     public int getWeight(int v1, int v2){
        return adjacent [v1][v2];
     }
+    
+    public int[][] copyMatrix (){
+        int [][] copy = new int [adjacent.length][adjacent.length];
+        for (int i =0; i<adjacent.length; i++){
+            for(int j=0; j< adjacent.length;j++){
+                copy[i][j]= adjacent [i][j];
+            }
+        }        
+        return copy;
+    }
+
+    @Override
+    public String toString() {
+        String s ="";
+        for (int i =0; i<adjacent.length; i++){
+            for(int j=0; j< adjacent.length;j++){
+                
+                s= s+adjacent[i][j]+" |";
+            }
+            s= s+ '\n';
+        }   
+        return s;
+    }
+    
+    
 }
