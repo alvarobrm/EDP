@@ -18,6 +18,7 @@ public class Solution {
     }
     
   
+
     public ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m){
        // valores iniciales
         int n = i.getG().getNodes();
@@ -34,6 +35,7 @@ public class Solution {
         
         visitados[ini]=true;
         costes[ini]=0;
+
         ultimo[ini]=0;
         
         // marcar los n-1 vertices
@@ -148,6 +150,7 @@ public class Solution {
     public static void main(String[] args) {
         Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
         Solution s= new Solution(i);
+
         ArrayList<int[]> deleteEdges = new ArrayList<>();
         int[][] matrix = i.getG().getAdjacent();
         ArrayList<Integer> del; 
@@ -174,7 +177,7 @@ public class Solution {
         
      
         
-        
+
     }
         
         
