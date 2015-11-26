@@ -2,101 +2,82 @@
 package edp;
 
 import java.util.ArrayList;
-import java.util.Queue;
 
 /**
  *
  * @author Alvaro Berrocal Martin - URJC
  */
 public class Solution {
-    private Instance i;
+    private int conn;
+    private int notConn;
+    private ArrayList<ArrayList<Integer>> routes;
     
     
     
-    public Solution(Instance i){
-        this.i=i;
+    public Solution(){
+        conn=0;
+        notConn=0;
+        routes= new ArrayList<> ();
     }
+
+    public int getConn() {
+        return conn;
+    }
+
+    public int getNotConn() {
+        return notConn;
+    }
+
+    public ArrayList<ArrayList<Integer>> getRoutes() {
+        return routes;
+    }
+
+    public void setConn(int conn) {
+        this.conn = conn;
+    }
+
+    public void setNotConn(int notConn) {
+        this.notConn = notConn;
+    }
+
+    public void setRoutes(ArrayList<ArrayList<Integer>> rutes) {
+        this.routes = rutes;
+    }
+    
+    public void addConn (){
+        this.conn++;
+    }
+    
+    public void addNotConn(){
+        this.notConn++;
+    }
+    
+    public void addRoute(ArrayList<Integer> l){
+        routes.add(l);
+    }
+
+    @Override
+    public String toString() {
+        String s= "Nodos que se han podido conectar: "+conn+"\n";
+        s=s+ "Nodos que no se han podido conectar: "+notConn+"\n";
+        return s;
+    }
+    
+    public String routesToString (){
+        String s="";
+        for (int i = 0; i < routes.size(); i++){
+            if (routes.get(i).size()==0)
+                s=s+"Camino no alcanzable\n";
+            else
+                s=s+routes.get(i).toString()+"\n";
+        }
+        return s;
+    }
+    
+    
     
   
-    public ArrayList<Integer> Dijkstra(int ini, int end){
-       // valores iniciales
-        int n = i.getG().getNodes();
-        
-        boolean [] visitados= new boolean [n];
-        int [] costes = new int [n];
-        int ultimo []= new int [n]; // ultimo vertice que se visito
-        int [][] matrix = i.getG().getAdjacent();
-        for (int i=0; i<n ; i++){
-            visitados [i]=false;
-            costes [i] = matrix[ini][i];
-            ultimo[i]=ini;
-        }
-        
-        visitados[ini]=true;
-        costes[ini]=0;
-        ArrayList<Integer> c =new ArrayList <>();
-        // marcar los n-1 vertices
-        c.add(ini);
-        
-        for (int i=0; i<n;i++){
-            int v = minimo(n, visitados, costes); //seleciona el vertice no amrcado de menor disctancia
-            
-            visitados[v]=true;
-            c.add(v);
-         //actualiza la distancia de vertices no marcados
-            for (int w=0;w<n;w++){
-                if (!visitados[w]){
-                    if((costes[v]+matrix[v][w]< costes[w])){
-                        costes[w]= costes[v]+matrix[v][w];
-                        ultimo[w]=v;
-                    }    
-                }
-            }
-            if (v== end)
-                break;
-        }
-        for (int i=0;i<n;i++)
-            System.out.println("Costo minimo a "+i+": "+costes[i]);
-        return c;
-                
-        
-    }
-    
-    public void camino (int[] c, int s, int e){
-        if (c[e]==100000){
-            System.out.println("Nodo no alcanzable");
-        }else{
-            final ArrayList path = new ArrayList();
-            int x = e;
-            while (x != s) {
-                path.add("Vertice "+x);
-                x = c[x];
-            }
-        
-            path.add("Vertice "+x);
-            System.out.println(path);
-        }
-        
-    }
-    
-    public int minimo(int n,boolean [] vis, int [] m ){
-        int mx = 100;
-        int v = 1;
-        for (int j=0;j<n; j++){
-            if (!vis[j]&& (m[j]<= mx)){
-                mx= m[j];
-                v=j;
-            }
-        }
-        return v;
-    }
-    
-    public static void main(String[] args) {
-        Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
-        Solution s= new Solution(i);
-        ArrayList <Integer> cam = s.Dijkstra(1, 5);
-        System.out.println(cam);
-    }
+
         
         
 }

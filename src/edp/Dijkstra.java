@@ -5,65 +5,98 @@
  */
 package edp;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author alvar
  */
 public class Dijkstra {
-
-    // Dijkstra's algorithm to find shortest path from s to all other nodes
-
-    public static int[] dijkstra(Graph G, int s) {
-        final int[] dist = new int[G.getNodes()];  // shortest known distance from "s"
-        final int[] pred = new int[G.getNodes()];  // preceeding node in path
-        final boolean[] visited = new boolean[G.getNodes()]; // all false initially
-
-        for (int i = 0; i < dist.length; i++) {
-            dist[i] = Integer.MAX_VALUE;
+    
+    
+    public static ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m, Instance ins, Solution s){
+       // valores iniciales
+        int n = ins.getG().getNodes();
+        
+        boolean [] visitados= new boolean [n];
+        int [] costes = new int [n];
+        int ultimo []= new int [n]; // ultimo vertice que se visito
+        int [][] matrix = m;
+        for (int i=0; i<n ; i++){
+            visitados [i]=false;
+            costes [i] = matrix[ini][i];
+            ultimo[i]=matrix[ini][i]<100000?ini:0;
         }
-        dist[s] = 0;
+        
+        visitados[ini]=true;
+        costes[ini]=0;
 
-        for (int i = 0; i < dist.length; i++) {
-            final int next = minVertex(dist, visited);
-            if (next ==-1)
+        ultimo[ini]=0;
+        
+        // marcar los n-1 vertices
+        ArrayList <Integer> l = new ArrayList<> ();
+        for (int i=0; i<n-1;i++){
+            //int v = minimo(n, visitados, costes); //seleciona el vertice no marcado de menor distancia
+            int v;
+             for (v=0; (v<visitados.length) && (visitados[v]); v++) {}
+         
+         int men=v;
+         for (; v<visitados.length; v++) {
+            if (!(visitados[v]) && (costes[v]<costes[men]) && (costes[v]>0))
+               men = v;
+         }
+            visitados[men]=true;
+            //actualiza la distancia de vertices no marcados
+            if (costes[men]==-1)
                 continue;
-            visited[next] = true;
+            for (int w = 0; w < n; w++) {
+                if (!visitados[w]) {
+                    if ((matrix [men][w]==-1))
+                        continue;
+                    if ((costes[men] + matrix[men][w] < costes[w])) {
+                        costes[w] = costes[men] + matrix[men][w];
+                       
+                        ultimo[w] = men;
 
-           // The shortest path to next is dist[next] and via pred[next].
-            final int[] n = G.neighbors(next);
-            for (int j = 0; j < n.length; j++) {
-                final int v = n[j];
-                final int d = dist[next] + G.getWeight(next, v);
-                if (dist[v] > d) {
-                    dist[v] = d;
-                    pred[v] = next;
+                    }
+
                 }
             }
+            
         }
-        return pred;  // (ignore pred[s]==0!)
+        ArrayList<Integer> del = new ArrayList<>();
+        imprimirCaminos (ultimo, ini,fin,  costes, del, s);
+        return del;
+        
     }
-
-    private static int minVertex(int[] dist, boolean[] v) {
-        int x = Integer.MAX_VALUE;
-        int y = -1;   // graph not connected, or no unvisited vertices
-        for (int i = 0; i < dist.length; i++) {
-            if (!v[i] && dist[i] < x) {
-                y = i;
-                x = dist[i];
-            }
+    
+    private static void imprimirCaminos (int[] preds, int origen, int dest, int[] distancias, ArrayList<Integer> del, Solution s) {
+         if (distancias[dest]>=100000||distancias[dest]<0){ /*valor tomado como infinito*/
+            s.addNotConn();
+         }
+         else{
+            imprimirCamino(preds,origen,dest, del);
+            s.addConn();
+         }
+   }
+   
+   private static void imprimirCamino (int[] preds, int origen, int j, ArrayList<Integer> del) {
+      if (j!=origen)
+         imprimirCamino (preds,origen,preds[j], del);
+      del.add(j);
+      
+   }
+    
+    
+    
+    public static int [][] deleteEdges (int [][] m, ArrayList<Integer> e){
+        for (int i = 0 ; i<e.size()-1; i++){
+            int a1= e.get(i);
+            int a2 = e.get(i+1);
+            m[a1][a2]= -1;
+            m[a2][a1]= -1;
         }
-        return y;
+        return m;
     }
-
-    public static void printPath(Graph G, int[] pred, int s, int e) {
-        final java.util.ArrayList path = new java.util.ArrayList();
-        int x = e;
-        while (x != s) {
-            path.add(0, "camino : ");
-            x = pred[x];
-        }
-        path.add(0,"no camino : ");
-        System.out.println(path);
-    }
-
+    
 }
