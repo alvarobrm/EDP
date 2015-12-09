@@ -18,7 +18,7 @@ public class EDP {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Instance i = new Instance ("AS-BA.R-Wax.v100e217.bb","AS-BA.R-Wax.v100e217.rpairs.10.1" );
+        Instance i = new Instance ("instancias/AS-BA.R-Wax.v100e217.bb","instancias/AS-BA.R-Wax.v100e217.rpairs.40.20" );
         Solution s= new Solution();
 
         ArrayList<Integer> del; 
