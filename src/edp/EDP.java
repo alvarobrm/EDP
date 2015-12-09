@@ -71,6 +71,7 @@ public class EDP {
         long time = end - start;
         System.out.println("Tiempo empleado: "+time+" ms");
         System.out.println("¿Desea ver las rutas?s/n");
+        
         Scanner scan = new Scanner (System.in);
         String op=scan.nextLine();
         if (op.equals("s"))
