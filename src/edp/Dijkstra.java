@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author alvar
+ * @author Alvaro Berrocal Martin - URJC
  */
 public class Dijkstra {
     
