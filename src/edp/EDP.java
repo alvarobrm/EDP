@@ -17,7 +17,7 @@ import org.graphstream.ui.view.Viewer;
 
 /**
  *
- * @author alvar
+ * @author Alvaro Berrocal Martin - URJC
  */
 public class EDP {
 
