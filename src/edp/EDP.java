@@ -5,6 +5,8 @@
  */
 package edp;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.graphstream.graph.Graph;
@@ -34,48 +36,110 @@ public class EDP {
             for (int j =0; j<n; j++){
                 if (m[i][j]== 1){
                     gr.addEdge(i+"-"+j, ""+i,""+j);
-                    m[j][i]= 0;
+                    m[j][i] = 0;
                 }
-                    
+
             }
         }
-        
+
         for (Node node : gr) {
-			node.addAttribute("ui.label", node.getId());
-			node.addAttribute("ui.style", "size: 30px; "
-										+ "text-alignment: center;"
-										+ "shape: box;"
-										+ "fill-color: green;");
+            node.addAttribute("ui.label", node.getId());
+            node.addAttribute("ui.style", "size: 30px; "
+                    + "text-alignment: center;"
+                    + "shape: box;"
+                    + "fill-color: green;");
         }
         gr.addAttribute("ui.antialias", true);
         gr.display();
     }
-    
-    
-    
-    public static void main(String[] args) {
-        
-        long start =System.currentTimeMillis();
-        Instance i = new Instance ("instancias/AS-BA.R-Wax.v100e217.bb","instancias/AS-BA.R-Wax.v100e217.rpairs.10.1" );
-        Solution s= new Solution();
 
-        
-        ArrayList<Integer> del; 
-        for (int j=0; j< i.getNodeMatrix().size();j++  ){
-            del=Dijkstra.Dijkstra(i.getNodeMatrix().get(j) [0],i.getNodeMatrix().get(j) [1], i.getG().getAdjacent(), i, s);
-            s.addRoute(del);
-            i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
+    public static void writeFile(Solution s, String f) {
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+        try {
+            fichero = new FileWriter(f, true);
+            pw = new PrintWriter(fichero);
+            pw.println(s.getI().getNameFile() + ";" + s.getConn() + ";" + s.getNotConn() + ";" + s.getTime());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+           // Nuevamente aprovechamos el finally para 
+                // asegurarnos que se cierra el fichero.
+                if (null != fichero) {
+                    fichero.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
-        System.out.println(s.toString());
-        long end =System.currentTimeMillis();
-        long time = end - start;
-        System.out.println("Tiempo empleado: "+time+" ms");
-        System.out.println("¿Desea ver las rutas?s/n");
-        
-        Scanner scan = new Scanner (System.in);
-        String op=scan.nextLine();
-        if (op.equals("s"))
-           System.out.println(s.routesToString());
     }
-    
+
+    public static void main(String[] args) {
+
+        //Ejecutar variable
+        for (int w = 1; w < 21; w++) {
+
+            Solution s1 = new Solution();
+            long time = 0;
+            long start = System.nanoTime();
+
+            for (int aux = 0; aux < 100; aux++) {
+                Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
+                s1.setI(i);
+                Solution s = new Solution();
+                s.setI(i);
+                ArrayList<Integer> del;
+                for (int j = 0; j < i.getNodeMatrix().size(); j++) {
+                    //del = Dijkstra.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
+                    del = RandomSolution.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
+                    s.addRoute(del);
+                    i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
+                }
+                System.out.println(s.toString());
+                long end = System.nanoTime();
+                time = end - start;
+                s.setTime(time);
+                s1 = s1.isBetter(s);
+                
+            }
+            System.out.println("Tiempo empleado: " + time + " ns");
+            writeFile(s1, "salidaRandom.csv");
+        }
+
+        //Ejecutar caminos mas cortos
+        /*for (int w = 1; w < 21; w++) {
+
+            long time = 0;
+            long start = System.nanoTime();
+
+            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
+            
+            Solution s = new Solution();
+            s.setI(i);
+            ArrayList<Integer> del;
+            for (int j = 0; j < i.getNodeMatrix().size(); j++) {
+                del = Dijkstra.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
+
+                s.addRoute(del);
+                i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
+            }
+            System.out.println(s.toString());
+            long end = System.nanoTime();
+            time = end - start;
+            s.setTime(time);
+            System.out.println("Tiempo empleado: " + time + " ns");
+            writeFile(s, "salida.csv");
+        }*/
+
+        /*System.out.println("¿Desea ver las rutas?s/n");
+
+        Scanner scan = new Scanner(System.in);
+        String op = scan.nextLine();
+        if (op.equals("s")) {
+            System.out.println(s.routesToString());
+        }*/
+    }
+
 }

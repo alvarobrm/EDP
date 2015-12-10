@@ -11,6 +11,8 @@ public class Solution {
     private int conn;
     private int notConn;
     private ArrayList<ArrayList<Integer>> routes;
+    private long time;
+    Instance i ;
     
     
     
@@ -18,9 +20,29 @@ public class Solution {
         conn=0;
         notConn=0;
         routes= new ArrayList<> ();
+        time= 0 ;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public Instance getI() {
+        return i;
+    }
+
+    public void setI(Instance i) {
+        this.i = i;
     }
 
 
+    
+    
+    
     public int getConn() {
         return conn;
     }
@@ -77,10 +99,9 @@ public class Solution {
         return s;
     }
     
-    
-    
-
-        
+    public Solution isBetter (Solution s){
+        return (s.getConn()>this.getConn())? s : this;
+    }
         
 }
 
