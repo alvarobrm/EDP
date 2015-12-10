@@ -79,14 +79,14 @@ public class EDP {
     public static void main(String[] args) {
 
         //Ejecutar variable
-        for (int w = 1; w < 21; w++) {
+        /*for (int w = 1; w < 21; w++) {
 
             Solution s1 = new Solution();
             long time = 0;
             long start = System.nanoTime();
 
             for (int aux = 0; aux < 100; aux++) {
-                Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
+                Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
                 s1.setI(i);
                 Solution s = new Solution();
                 s.setI(i);
@@ -106,15 +106,15 @@ public class EDP {
             }
             System.out.println("Tiempo empleado: " + time + " ns");
             writeFile(s1, "salidaRandom.csv");
-        }
+        }*/
 
         //Ejecutar caminos mas cortos
-        /*for (int w = 1; w < 21; w++) {
+        for (int w = 1; w < 21; w++) {
 
             long time = 0;
             long start = System.nanoTime();
 
-            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
+            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
             
             Solution s = new Solution();
             s.setI(i);
@@ -131,7 +131,7 @@ public class EDP {
             s.setTime(time);
             System.out.println("Tiempo empleado: " + time + " ns");
             writeFile(s, "salida.csv");
-        }*/
+        }
 
         /*System.out.println("¿Desea ver las rutas?s/n");
 
