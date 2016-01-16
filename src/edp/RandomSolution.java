@@ -41,7 +41,7 @@ public class RandomSolution {
          int men=v;
          
          for (; v<visitados.length; v++) {
-             int rand = (int) (Math.random()*1000) % 2;
+             int rand = (int) (MyRandom.nextInt(1000)) % 2;
             if (!(visitados[v]) && (costes[v]<costes[men]) && (costes[v]>0) && rand !=0)
                men = v;
          }

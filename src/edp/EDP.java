@@ -78,14 +78,14 @@ public class EDP {
 
     public static void main(String[] args) {
 
-        //Ejecutar variable
+        //Ejecutar solucion aleatoria
         /*for (int w = 1; w < 21; w++) {
 
             Solution s1 = new Solution();
-            long time = 0;
-            long start = System.nanoTime();
+            double time = 0;
+            double start = System.currentTimeMillis();
 
-            for (int aux = 0; aux < 100; aux++) {
+            for (int aux = 0; aux < 1000; aux++) {
                 Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
                 s1.setI(i);
                 Solution s = new Solution();
@@ -98,21 +98,23 @@ public class EDP {
                     i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
                 }
                 System.out.println(s.toString());
-                long end = System.nanoTime();
+                double end = System.currentTimeMillis();
                 time = end - start;
+                time = time /1000;
                 s.setTime(time);
                 s1 = s1.isBetter(s);
                 
             }
-            System.out.println("Tiempo empleado: " + time + " ns");
+            s1.setTime(time);
+            System.out.println("Tiempo empleado: " + time + " s");
             writeFile(s1, "salidaRandom.csv");
         }*/
 
         //Ejecutar caminos mas cortos
         for (int w = 1; w < 21; w++) {
 
-            long time = 0;
-            long start = System.nanoTime();
+            double time = 0;
+            double start = System.currentTimeMillis();
 
             Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
             
@@ -126,10 +128,11 @@ public class EDP {
                 i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
             }
             System.out.println(s.toString());
-            long end = System.nanoTime();
+            double end = System.currentTimeMillis();
             time = end - start;
+            time= time/1000;
             s.setTime(time);
-            System.out.println("Tiempo empleado: " + time + " ns");
+            System.out.println("Tiempo empleado: " + time + " s");
             writeFile(s, "salida.csv");
         }
 

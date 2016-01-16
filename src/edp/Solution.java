@@ -11,7 +11,7 @@ public class Solution {
     private int conn;
     private int notConn;
     private ArrayList<ArrayList<Integer>> routes;
-    private long time;
+    private double time;
     Instance i ;
     
     
@@ -23,11 +23,11 @@ public class Solution {
         time= 0 ;
     }
 
-    public long getTime() {
+    public double getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(double time) {
         this.time = time;
     }
 
