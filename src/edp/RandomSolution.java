@@ -14,6 +14,11 @@ import java.util.ArrayList;
 public class RandomSolution {
      public static ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m, Instance ins, Solution s){
        // valores iniciales
+         if (ini== 5000){
+             s.addNotConn();
+             return new ArrayList<>();
+             
+         }
         int n = ins.getG().getNodes();
         
         boolean [] visitados= new boolean [n];

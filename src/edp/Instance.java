@@ -130,10 +130,11 @@ public class Instance {
     public void deletePair (ArrayList<Integer> route){
         int ini = route.get(0);
         int end = route.get(route.size()-1);
-        for (int [] pair: this.nodeMatrix){
-            if (pair[0]==ini && pair[1]==end){
-                this.nodeMatrix.remove(pair);
-                break;
+        for (int i = 0; i <= this.nodeMatrix.size()-1; i++){
+            int[] pair = this.nodeMatrix.get(i);
+            if (pair[0]==ini&& pair[1]==end){
+                this.nodeMatrix.get(i)[0]= 5000;//nodo no existente
+                this.nodeMatrix.get(i)[1]= 1;
             }
         }
             
