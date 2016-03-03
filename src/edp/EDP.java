@@ -120,7 +120,7 @@ public class EDP {
                         double start = System.currentTimeMillis();
 
                         for (int aux = 0; aux < rep; aux++) {
-                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
                             s1.setI(i);
                             Solution s = new Solution();
                             s.setI(i);
