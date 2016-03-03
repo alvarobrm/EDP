@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -26,14 +27,14 @@ public class Instance {
         this.ReadFile();
         
     }
-    public Instance (Graph g,ArrayList<int []>  nodeMatrix){
-        this.nameGraph= "";
-        this.nameFile="";
-        nodeMatrix = new ArrayList<>();
-        for (int []list : nodeMatrix){
-            nodeMatrix.add(list);
+    public Instance (Instance instance){
+        this.nameGraph= instance.nameGraph;
+        this.nameFile=instance.nameFile;
+        this.nodeMatrix = new ArrayList<>();
+        for (int []list : instance.getNodeMatrix()){
+            this.nodeMatrix.add(list);
         }
-        this.g = g;
+        this.g = instance.getG();
     }
 
     public File getFileGraph() {

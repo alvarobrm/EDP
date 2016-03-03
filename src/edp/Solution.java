@@ -99,6 +99,10 @@ public class Solution {
         return s;
     }
     
+    public boolean isRouteConected (int pos){
+        return this.getRoutes().get(pos).size()>0;
+    }
+    
     public boolean isBetter (Solution s){
         return (this.getConn()>s.getConn());
     }

@@ -75,29 +75,33 @@ public class EDP {
     
     public static Solution localSearch(Solution sol, Instance instance) {
         Solution bestSolution = sol;
-        Solution auxSolution = sol;
-        Instance auxInstance = new Instance(instance.getG(), instance.getNodeMatrix());
+        
+       
+        Instance auxInstance;
         int pos = 0;
         while (pos <= bestSolution.getConn()) {
+            auxInstance = new Instance(instance);
+            Solution auxSolution = new Solution();
+            auxSolution.setI(auxInstance);
             //eliminar pares
-            System.out.println(auxInstance.getNodeMatrix().size());
-            auxInstance.deletePair(bestSolution.getRoutes().get(pos));
-            ArrayList<Integer> del;
-            for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
-                del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
+            if (bestSolution.isRouteConected(pos)){
+                auxInstance.deletePair(bestSolution.getRoutes().get(pos));
+                ArrayList<Integer> del;
+                for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
+                    del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
 
-                auxSolution.addRoute(del);
-                auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
-            }
-            if(auxSolution.isBetter(bestSolution)){
-                bestSolution = auxSolution;
-                pos = 0;
-            }else{
+                    auxSolution.addRoute(del);
+                    auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
+                }
+                if(auxSolution.isBetter(bestSolution)){
+                    bestSolution = auxSolution;
+                    pos = 0;
+                }else{
+                    pos++;
+                }
+                    
+            }else
                 pos ++;
-                auxInstance = new Instance(instance.getG(), (ArrayList<int[]>) instance.getNodeMatrix().clone());
-            }
-                
-
         }
         return bestSolution;
     }
@@ -136,9 +140,9 @@ public class EDP {
                         double end = System.currentTimeMillis();
                         time = end - start;
                         time = time / 1000;
-                        solution.setTime(time);
+                        bestSolution.setTime(time);
                         System.out.println("Tiempo empleado: " + time + " s");
-                        writeFile(solution, "salida.csv");
+                        writeFile(bestSolution, "salida.csv");
                     }
                     break;
                 case "2":
