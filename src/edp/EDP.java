@@ -75,17 +75,15 @@ public class EDP {
     
     public static Solution localSearch(Solution sol, Instance instance) {
         Solution bestSolution = sol;
-        
-       
         Instance auxInstance;
-        int pos = 0;
+        int pos = 1;
         while (pos <= bestSolution.getConn()) {
             auxInstance = new Instance(instance);
             Solution auxSolution = new Solution();
             auxSolution.setI(auxInstance);
             //eliminar pares
-            if (bestSolution.isRouteConected(pos)){
-                auxInstance.deletePair(bestSolution.getRoutes().get(pos));
+            if (bestSolution.isRouteConected(pos - 1)) {
+                auxInstance.deletePair(bestSolution.getRoutes().get(pos - 1));
                 ArrayList<Integer> del;
                 for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
                     del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
@@ -93,16 +91,50 @@ public class EDP {
                     auxSolution.addRoute(del);
                     auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
                 }
-                if(auxSolution.isBetter(bestSolution)){
+                if (auxSolution.isBetter(bestSolution)) {
                     bestSolution = auxSolution;
-                    pos = 0;
-                }else{
+                    pos = 1;
+                } else {
                     pos++;
                 }
-                    
-            }else
-                pos ++;
+
+            } else {
+                pos++;
+            }
         }
+        return bestSolution;
+    }
+
+    public static Solution localSearchRandom(Solution sol, Instance instance, int rep) {
+        Solution bestSolution = sol;
+
+        Instance auxInstance;
+        int pos = 1;
+        while (pos <= bestSolution.getConn()) {
+            Solution auxBestSolution = new Solution();
+            for (int aux = 0; aux < rep; aux++) {
+                auxInstance = new Instance(instance);
+                Solution auxSolution = new Solution();
+                auxSolution.setI(auxInstance);
+                if (bestSolution.isRouteConected(pos - 1)) {
+                    auxInstance.deletePair(bestSolution.getRoutes().get(pos - 1));
+                    ArrayList<Integer> del;
+                    for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
+                        del = RandomSolution.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
+                        auxSolution.addRoute(del);
+                        auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del));
+                    }
+                    auxBestSolution = auxBestSolution.whoIsBetter(auxSolution);
+                }
+            }
+            if (auxBestSolution.isBetter(bestSolution)){
+                bestSolution = auxBestSolution;
+                pos =1;
+            }else{
+                pos ++;
+            }
+        }
+
         return bestSolution;
     }
 
@@ -122,8 +154,8 @@ public class EDP {
                         double time = 0;
                         double start = System.currentTimeMillis();
 
-                        Instance instance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
-                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                        Instance instance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
+                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
 
                         Solution solution = new Solution();
                         solution.setI(instance);
@@ -150,13 +182,14 @@ public class EDP {
                     int rep = Integer.parseInt(sn.nextLine());
                     //Ejecutar solucion aleatoria
                     for (int w = 1; w < 21; w++) {
-
+                        Solution bestSolution;
                         Solution s1 = new Solution();
                         double time = 0;
                         double start = System.currentTimeMillis();
-
+                        
+                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
                         for (int aux = 0; aux < rep; aux++) {
-                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.10." + w);
                             s1.setI(i);
                             Solution s = new Solution();
                             s.setI(i);
@@ -167,13 +200,13 @@ public class EDP {
                                 s.addRoute(del);
                                 i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
                             }
-                            //System.out.println(s.toString());
+                            //Llamada a busqueda local
+                            bestSolution = localSearchRandom(s, localSeachInstance, rep);
+                            s1 =bestSolution.whoIsBetter(s1);
                             double end = System.currentTimeMillis();
                             time = end - start;
                             time = time / 1000;
-                            s.setTime(time);
-                            s1 = s1.whoIsBetter(s);
-
+                            
                         }
                         s1.setTime(time);
                         System.out.println("Tiempo empleado: " + time + " s");
@@ -181,11 +214,6 @@ public class EDP {
                     }
             }
         }
-
-        
-
-        
-
         /*System.out.println("¿Desea ver las rutas?s/n");
 
         Scanner scan = new Scanner(System.in);
