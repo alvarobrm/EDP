@@ -26,6 +26,15 @@ public class Instance {
         this.ReadFile();
         
     }
+    public Instance (Graph g,ArrayList<int []>  nodeMatrix){
+        this.nameGraph= "";
+        this.nameFile="";
+        nodeMatrix = new ArrayList<>();
+        for (int []list : nodeMatrix){
+            nodeMatrix.add(list);
+        }
+        this.g = g;
+    }
 
     public File getFileGraph() {
         return fileGraph;
@@ -117,7 +126,17 @@ public class Instance {
     }
 
 
-    
+    public void deletePair (ArrayList<Integer> route){
+        int ini = route.get(0);
+        int end = route.get(route.size()-1);
+        for (int [] pair: this.nodeMatrix){
+            if (pair[0]==ini && pair[1]==end){
+                this.nodeMatrix.remove(pair);
+                break;
+            }
+        }
+            
+    }
     
     
    

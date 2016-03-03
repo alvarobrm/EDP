@@ -99,10 +99,13 @@ public class Solution {
         return s;
     }
     
-    public Solution isBetter (Solution s){
-        return (s.getConn()>this.getConn())? s : this;
+    public boolean isBetter (Solution s){
+        return (this.getConn()>s.getConn());
     }
-        
+ 
+    public Solution whoIsBetter(Solution s){
+        return (this.conn>s.conn)? this: s;
+    }
 }
 
 

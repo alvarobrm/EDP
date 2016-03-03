@@ -72,6 +72,35 @@ public class EDP {
             }
         }
     }
+    
+    public static Solution localSearch(Solution sol, Instance instance) {
+        Solution bestSolution = sol;
+        Solution auxSolution = sol;
+        Instance auxInstance = new Instance(instance.getG(), instance.getNodeMatrix());
+        int pos = 0;
+        while (pos <= bestSolution.getConn()) {
+            //eliminar pares
+            System.out.println(auxInstance.getNodeMatrix().size());
+            auxInstance.deletePair(bestSolution.getRoutes().get(pos));
+            ArrayList<Integer> del;
+            for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
+                del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
+
+                auxSolution.addRoute(del);
+                auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
+            }
+            if(auxSolution.isBetter(bestSolution)){
+                bestSolution = auxSolution;
+                pos = 0;
+            }else{
+                pos ++;
+                auxInstance = new Instance(instance.getG(), (ArrayList<int[]>) instance.getNodeMatrix().clone());
+            }
+                
+
+        }
+        return bestSolution;
+    }
 
     public static void main(String[] args) {
 
@@ -89,24 +118,27 @@ public class EDP {
                         double time = 0;
                         double start = System.currentTimeMillis();
 
-                        Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                        Instance instance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
 
-                        Solution s = new Solution();
-                        s.setI(i);
+                        Solution solution = new Solution();
+                        solution.setI(instance);
                         ArrayList<Integer> del;
-                        for (int j = 0; j < i.getNodeMatrix().size(); j++) {
-                            del = Dijkstra.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
+                        for (int j = 0; j < instance.getNodeMatrix().size(); j++) {
+                            del = Dijkstra.Dijkstra(instance.getNodeMatrix().get(j)[0], instance.getNodeMatrix().get(j)[1], instance.getG().getAdjacent(), instance, solution);
 
-                            s.addRoute(del);
-                            i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
+                            solution.addRoute(del);
+                            instance.getG().setAdjacent(Dijkstra.deleteEdges(instance.getG().getAdjacent(), del)); // Elimino las aristas usadas
                         }
+                        //Llamada a busqueda local
+                        Solution bestSolution = localSearch(solution, localSeachInstance);
                         //System.out.println(s.toString());
                         double end = System.currentTimeMillis();
                         time = end - start;
                         time = time / 1000;
-                        s.setTime(time);
+                        solution.setTime(time);
                         System.out.println("Tiempo empleado: " + time + " s");
-                        writeFile(s, "salida.csv");
+                        writeFile(solution, "salida.csv");
                     }
                     break;
                 case "2":
@@ -136,7 +168,7 @@ public class EDP {
                             time = end - start;
                             time = time / 1000;
                             s.setTime(time);
-                            s1 = s1.isBetter(s);
+                            s1 = s1.whoIsBetter(s);
 
                         }
                         s1.setTime(time);
