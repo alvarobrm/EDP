@@ -109,7 +109,7 @@ public class EDP {
         Solution bestSolution = sol;
 
         int pos = 1;
-        while (pos <= bestSolution.getConn()) {
+        while (pos <= bestSolution.getRoutes().size()) {
             Solution auxBestSolution = new Solution();
             for (int aux = 0; aux < rep; aux++) {
                 if (bestSolution.isRouteConected(pos - 1)) {
@@ -119,7 +119,6 @@ public class EDP {
                     auxBestSolution.setI(auxInstance);
                     Solution auxSolution = new Solution();
                     auxSolution.setI(auxInstance);
-                
                     ArrayList<Integer> del;
                     for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
                         del = RandomSolution.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
@@ -189,9 +188,9 @@ public class EDP {
                         double time = 0;
                         double start = System.currentTimeMillis();
                         
-                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
+                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
                         for (int aux = 0; aux < rep; aux++) {
-                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
+                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
                             s1.setI(i);
                             Solution s = new Solution();
                             s.setI(i);
@@ -207,8 +206,7 @@ public class EDP {
                             s1 =bestSolution.whoIsBetter(s1);
                             double end = System.currentTimeMillis();
                             time = end - start;
-                            time = time / 1000;
-                            
+                            time = time / 1000; 
                         }
                         s1.setTime(time);
                         System.out.println("Tiempo empleado: " + time + " s");
