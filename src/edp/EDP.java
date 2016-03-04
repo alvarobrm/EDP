@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edp;
 
 import java.io.FileWriter;
@@ -18,10 +13,7 @@ import org.graphstream.graph.implementations.SingleGraph;
  */
 public class EDP {
 
-    /**
-     * @param args the command line arguments
-     */
-    
+   
     public static void printGraph(edp.Graph g, Solution s){
         int n = g.getNodes();
         org.graphstream.graph.Graph gr = new SingleGraph("G1"); 
@@ -144,7 +136,8 @@ public class EDP {
 
         Scanner sn = new Scanner(System.in);
         String op = "1";
-
+        String nameGraph = "instancias/AS-BA.R-Wax.v100e217.bb";
+        String nameMatriz = "instancias/AS-BA.R-Wax.v100e217.rpairs.40.";
         while (op.equals("1") || op.equals("2")) {
             System.out.println("Pulse 1 para Dijkstra y 2 para Aleatoreo. Otro para terminar");
             op = sn.nextLine();
@@ -156,8 +149,8 @@ public class EDP {
                         double time = 0;
                         double start = System.currentTimeMillis();
 
-                        Instance instance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
-                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.40." + w);
+                        Instance instance = new Instance(nameGraph, nameMatriz + w);
+                        Instance localSeachInstance = new Instance(nameGraph, nameMatriz + w);
 
                         Solution solution = new Solution();
                         solution.setI(instance);
@@ -189,8 +182,7 @@ public class EDP {
                         Solution s1 = new Solution();
                         double time = 0;
                         double start = System.currentTimeMillis();
-                        String nameGraph = "instancias/AS-BA.R-Wax.v100e217.bb";
-                        String nameMatriz = "instancias/AS-BA.R-Wax.v100e217.rpairs.40.";
+                        
                         for (int aux = 0; aux < rep; aux++) {
                             Instance i = new Instance(nameGraph, nameMatriz+ w);
                             s1.setI(i);
@@ -198,7 +190,6 @@ public class EDP {
                             s.setI(i);
                             ArrayList<Integer> del;
                             for (int j = 0; j < i.getNodeMatrix().size(); j++) {
-                                //del = Dijkstra.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
                                 del = RandomSolution.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s, random);
                                 s.addRoute(del);
                                 i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
@@ -216,13 +207,6 @@ public class EDP {
                     }
             }
         }
-        /*System.out.println("¿Desea ver las rutas?s/n");
-
-        Scanner scan = new Scanner(System.in);
-        String op = scan.nextLine();
-        if (op.equals("s")) {
-            System.out.println(s.routesToString());
-        }*/
     }
 
 }
