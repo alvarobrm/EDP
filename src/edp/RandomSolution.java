@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author Alvaro Berrocal Martin - URJC
  */
 public class RandomSolution {
-     public static ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m, Instance ins, Solution s){
+     public static ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m, Instance ins, Solution s, MyRandom r){
        // valores iniciales
          if (ini== 5000){
              s.addNotConn();
@@ -46,7 +46,7 @@ public class RandomSolution {
          int men=v;
          
          for (; v<visitados.length; v++) {
-             int rand = (int) (MyRandom.nextInt(1000)) % 2;
+             int rand = (int) (r.nextInt(1000)) % 2;
             if (!(visitados[v]) && (costes[v]<costes[men]) && (costes[v]>0) && rand !=0)
                men = v;
          }

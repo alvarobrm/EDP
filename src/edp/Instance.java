@@ -32,9 +32,13 @@ public class Instance {
         this.nameFile=instance.nameFile;
         this.nodeMatrix = new ArrayList<>();
         for (int []list : instance.getNodeMatrix()){
-            this.nodeMatrix.add(list);
+            int [] p = new int [2];
+            p[0]=list[0];
+            p[1]=list[1];
+            this.nodeMatrix.add(p);
         }
-        this.g = instance.getG();
+        this.g = new Graph(instance.getG().getNodes());
+        this.g.setAdjacent(instance.getG().copyMatrix());
     }
 
     public File getFileGraph() {
@@ -127,17 +131,9 @@ public class Instance {
     }
 
 
-    public void deletePair (ArrayList<Integer> route){
-        int ini = route.get(0);
-        int end = route.get(route.size()-1);
-        for (int i = 0; i <= this.nodeMatrix.size()-1; i++){
-            int[] pair = this.nodeMatrix.get(i);
-            if (pair[0]==ini&& pair[1]==end){
-                this.nodeMatrix.get(i)[0]= 5000;//nodo no existente
-                this.nodeMatrix.get(i)[1]= 1;
-            }
-        }
-            
+    public void deletePair(int[] pair) {
+        pair[0] = 5000; // nodo no existente
+        pair[1] = 0 ;       
     }
     
     

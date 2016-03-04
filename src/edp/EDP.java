@@ -77,13 +77,13 @@ public class EDP {
         Solution bestSolution = sol;
         Instance auxInstance;
         int pos = 1;
-        while (pos <= bestSolution.getConn()) {
+        while (pos <= bestSolution.getRoutes().size()) {
             auxInstance = new Instance(instance);
             Solution auxSolution = new Solution();
             auxSolution.setI(auxInstance);
             //eliminar pares
             if (bestSolution.isRouteConected(pos - 1)) {
-                auxInstance.deletePair(bestSolution.getRoutes().get(pos - 1));
+                auxInstance.deletePair(auxInstance.getNodeMatrix().get(pos-1));
                 ArrayList<Integer> del;
                 for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
                     del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
@@ -105,23 +105,24 @@ public class EDP {
         return bestSolution;
     }
 
-    public static Solution localSearchRandom(Solution sol, Instance instance, int rep) {
+    public static Solution localSearchRandom(Solution sol, String graph, String matrix, int rep) {
         Solution bestSolution = sol;
-
+        int size = bestSolution.getRoutes().size();
         int pos = 1;
-        while (pos <= bestSolution.getRoutes().size()) {
+        MyRandom random = new MyRandom();
+        while (pos <= size) {
             Solution auxBestSolution = new Solution();
             for (int aux = 0; aux < rep; aux++) {
-                if (bestSolution.isRouteConected(pos - 1)) {
-                    Instance auxInstance = new Instance(instance);
-                    auxInstance.deletePair(bestSolution.getRoutes().get(pos - 1));
+                if (bestSolution.isRouteConected(pos-1)) {
+                    Instance auxInstance = new Instance(graph, matrix);
+                    auxInstance.deletePair(auxInstance.getNodeMatrix().get(pos-1));
                     
                     auxBestSolution.setI(auxInstance);
                     Solution auxSolution = new Solution();
                     auxSolution.setI(auxInstance);
                     ArrayList<Integer> del;
                     for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
-                        del = RandomSolution.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
+                        del = RandomSolution.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution, random);
                         auxSolution.addRoute(del);
                         auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del));
                     }
@@ -130,12 +131,12 @@ public class EDP {
             }
             if (auxBestSolution.isBetter(bestSolution)){
                 bestSolution = auxBestSolution;
-                pos =1;
+                
+                pos=1;
             }else{
                 pos ++;
             }
         }
-
         return bestSolution;
     }
 
@@ -182,27 +183,28 @@ public class EDP {
                     System.out.println("Introduzca el nº de repeticiones");
                     int rep = Integer.parseInt(sn.nextLine());
                     //Ejecutar solucion aleatoria
+                    MyRandom random = new MyRandom();
                     for (int w = 1; w < 21; w++) {
                         
                         Solution s1 = new Solution();
                         double time = 0;
                         double start = System.currentTimeMillis();
-                        
-                        Instance localSeachInstance = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                        String nameGraph = "instancias/AS-BA.R-Wax.v100e217.bb";
+                        String nameMatriz = "instancias/AS-BA.R-Wax.v100e217.rpairs.40.";
                         for (int aux = 0; aux < rep; aux++) {
-                            Instance i = new Instance("instancias/AS-BA.R-Wax.v100e217.bb", "instancias/AS-BA.R-Wax.v100e217.rpairs.25." + w);
+                            Instance i = new Instance(nameGraph, nameMatriz+ w);
                             s1.setI(i);
                             Solution s = new Solution();
                             s.setI(i);
                             ArrayList<Integer> del;
                             for (int j = 0; j < i.getNodeMatrix().size(); j++) {
                                 //del = Dijkstra.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
-                                del = RandomSolution.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s);
+                                del = RandomSolution.Dijkstra(i.getNodeMatrix().get(j)[0], i.getNodeMatrix().get(j)[1], i.getG().getAdjacent(), i, s, random);
                                 s.addRoute(del);
                                 i.getG().setAdjacent(Dijkstra.deleteEdges(i.getG().getAdjacent(), del));
                             }
                             //Llamada a busqueda local
-                            Solution bestSolution = localSearchRandom(s, localSeachInstance, rep);
+                            Solution bestSolution = localSearchRandom(s, nameGraph, nameMatriz+w , rep);
                             s1 =bestSolution.whoIsBetter(s1);
                             double end = System.currentTimeMillis();
                             time = end - start;

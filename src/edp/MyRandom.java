@@ -12,11 +12,14 @@ import java.util.Random;
  * @author alvar
  */
 public class MyRandom {
-    private static Random r = new Random(6);
+    private Random r ;
+    
+    MyRandom (){
+        r = new Random(6);
+    }
     
     
-    
-     public static int nextInt(int n){
+     public int nextInt(int n){
          return r.nextInt(n);
      }
      
