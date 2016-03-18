@@ -22,6 +22,13 @@ public class Solution {
         routes= new ArrayList<> ();
         time= 0 ;
     }
+    
+    public Solution(Solution solution){
+        this.conn=0;
+        this.notConn = 0;
+        this.routes = new ArrayList<>();
+        routes.addAll(solution.getRoutes());
+    }
 
     public double getTime() {
         return time;
@@ -36,7 +43,8 @@ public class Solution {
     }
 
     public void setI(Instance i) {
-        this.i = i;
+        this.i= i;
+        
     }
 
 
