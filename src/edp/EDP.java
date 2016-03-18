@@ -153,11 +153,14 @@ public class EDP {
                     //Ejecutar caminos mas cortos
                     for (int w = 1; w < 21; w++) {
 
+                        
+                        Instance instance = new Instance(nameGraph, nameMatriz + w);
+                        Instance localSeachInstance = new Instance(nameGraph, nameMatriz + w);
+                        
                         double time = 0;
                         double start = System.currentTimeMillis();
 
-                        Instance instance = new Instance(nameGraph, nameMatriz + w);
-                        Instance localSeachInstance = new Instance(nameGraph, nameMatriz + w);
+                       
 
                         Solution solution = new Solution();
                         solution.setI(instance);
@@ -187,9 +190,10 @@ public class EDP {
                     for (int w = 1; w < 21; w++) {
                         MyRandom random = new MyRandom();
                         Solution s1 = new Solution();
+                        Instance instance = new Instance(nameGraph, nameMatriz+ w);
                         double time = 0;
                         double start = System.currentTimeMillis();
-                        Instance instance = new Instance(nameGraph, nameMatriz+ w);
+                        
                         for (int aux = 0; aux < rep; aux++) {
                             Instance solutionInstance = new Instance(instance);
                             s1.setI(solutionInstance);
