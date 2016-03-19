@@ -24,8 +24,8 @@ public class Solution {
     }
     
     public Solution(Solution solution){
-        this.conn=0;
-        this.notConn = 0;
+        this.conn=solution.getConn();
+        this.notConn = solution.getNotConn();
         this.routes = new ArrayList<>();
         routes.addAll(solution.getRoutes());
     }
@@ -117,6 +117,16 @@ public class Solution {
  
     public Solution whoIsBetter(Solution s){
         return (this.conn>s.conn)? this: s;
+    }
+    
+    public void mergueRoutes (Solution s){
+        System.out.println(s.getRoutes().size()+"-"+this.getRoutes().size());
+        ArrayList<ArrayList<Integer>> r = s.getRoutes();
+        for (int i=0; i < this.routes.size(); i++){
+            if(this.getRoutes().get(i).size()==0){
+                this.getRoutes().set(i, s.getRoutes().get(i));
+            }
+        }
     }
 }
 
