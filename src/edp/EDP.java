@@ -67,35 +67,35 @@ public class EDP {
     
     public static Solution localSearch(Solution sol, Instance instance) {
         Solution bestSolution = sol;
-        Instance auxInstance;
+       //System.out.println(sol.routesToString());
         int pos = 1;
-        
+
         while (pos <= sol.getRoutes().size()) {
-            auxInstance = new Instance(sol.getI());
-            Solution auxSolution = new Solution(sol);
-            auxSolution.setI(auxInstance);
-            //eliminar pares
             if (sol.isRouteConected(pos - 1)) {
-                auxInstance.deletePair(auxInstance.getNodeMatrix().get(pos-1));
+                Instance auxInstance = new Instance(sol.getI());
+                Solution auxSolution = new Solution(sol);
+                auxSolution.setI(auxInstance);
+                auxSolution.deletePair(pos - 1);
+                ArrayList<int[]> notCon = auxSolution.getRoutesNotConected();
+                auxSolution.getI().setNodeMatrix(notCon);
                 ArrayList<Integer> del;
                 for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
                     del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
-                    auxSolution.addRoute(del);
+                    
+                    auxSolution.addRoute(del, j);
                     auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
                 }
-                
-                int newNotConn =sol.getNotConn()- auxSolution.getConn()+1;
-                int newConn = auxSolution.getConn()+ sol.getConn()-1;
+                int newNotConn = sol.getNotConn() - auxSolution.getConn();
+                int newConn= sol.getConn() + auxSolution.getConn();
                 auxSolution.setConn(newConn);
                 auxSolution.setNotConn(newNotConn);
-                if (auxSolution.isBetter(bestSolution)){ 
-                    auxSolution.mergueRoutes(bestSolution);
+                if (auxSolution.isBetter(bestSolution)){
                     bestSolution = auxSolution;
-                
                 }
-            } 
+            }
+
             pos++;
-            
+
         }
         return bestSolution;
     }
@@ -183,10 +183,6 @@ public class EDP {
                         bestSolution.setTime(time);
                         System.out.println("Tiempo empleado: " + time + " s");
                         writeFile(bestSolution, "salida.csv");
-                        if (bestSolution.getConn()>9){
-                            System.out.println(bestSolution.getI().getNameFile()+":");
-                            System.out.println(bestSolution.routesToString());
-                        }
                             
                     }
                     break;

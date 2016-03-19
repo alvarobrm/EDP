@@ -24,10 +24,11 @@ public class Solution {
     }
     
     public Solution(Solution solution){
-        this.conn=solution.getConn();
-        this.notConn = solution.getNotConn();
+        this.conn=0;
+        this.notConn = 0;
         this.routes = new ArrayList<>();
-        routes.addAll(solution.getRoutes());
+        this.routes.addAll(solution.getRoutes());
+        this.i=solution.getI();
     }
 
     public double getTime() {
@@ -88,6 +89,11 @@ public class Solution {
     public void addRoute(ArrayList<Integer> l){
         routes.add(l);
     }
+    public void addRoute(ArrayList<Integer> l, int pos){
+        ArrayList<Integer> r =routes.get(pos);
+        routes.add(pos, l);
+        routes.remove(r);
+    }
 
     @Override
     public String toString() {
@@ -120,13 +126,39 @@ public class Solution {
     }
     
     public void mergueRoutes (Solution s){
-        System.out.println(s.getRoutes().size()+"-"+this.getRoutes().size());
         ArrayList<ArrayList<Integer>> r = s.getRoutes();
         for (int i=0; i < this.routes.size(); i++){
             if(this.getRoutes().get(i).size()==0){
                 this.getRoutes().set(i, s.getRoutes().get(i));
             }
         }
+    }
+    
+    public void deletePair(int pos){
+        ArrayList<Integer> route = this.getRoutes().get(pos);
+        
+         int [][] ad =this.i.getG().getAdjacent();
+        for(int i =0 ; i<route.size()-1; i++){
+            int node1 = route.get(i);
+            int node2 = route.get(i+1);
+            ad[node1][node2]=1;
+            ad[node2][node1]=1;
+        }
+        this.i.getG().setAdjacent(ad);
+        this.i.deletePair(i.getNodeMatrix().get(pos));
+        this.conn--;
+        this.notConn ++;
+    }
+    
+    public ArrayList <int []> getRoutesNotConected(){
+        ArrayList <int []> notConected = new ArrayList();
+        for (int i =0; i< this.routes.size(); i++){
+           ArrayList <Integer> r= routes.get(i);
+           if (r.size()==0){
+               notConected.add(this.i.getNodeMatrix().get(i));
+           }
+        }
+        return notConected;
     }
 }
 
