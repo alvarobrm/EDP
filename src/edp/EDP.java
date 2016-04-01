@@ -67,7 +67,7 @@ public class EDP {
     
     public static Solution localSearch(Solution sol, Instance instance) {
         Solution bestSolution = sol;
-       //System.out.println(sol.routesToString());
+      
         int pos = 1;
 
         while (pos <= sol.getRoutes().size()) {
@@ -85,8 +85,8 @@ public class EDP {
                     auxSolution.addRoute(del, j);
                     auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
                 }
-                int newNotConn = sol.getNotConn() - auxSolution.getConn();
-                int newConn= sol.getConn() + auxSolution.getConn();
+                int newNotConn = sol.getNotConn() - auxSolution.getConn()+1;
+                int newConn= sol.getConn() + auxSolution.getConn()-1;
                 auxSolution.setConn(newConn);
                 auxSolution.setNotConn(newNotConn);
                 if (auxSolution.isBetter(bestSolution)){
@@ -112,14 +112,18 @@ public class EDP {
                 if (sol.isRouteConected(pos-1)) {
                     Instance auxInstance = new Instance(sol.getI());
                     auxInstance.deletePair(auxInstance.getNodeMatrix().get(pos-1));
-                    
                     auxBestSolution.setI(auxInstance);
                     Solution auxSolution = new Solution(auxBestSolution);
                     auxSolution.setI(auxInstance);
+                    auxBestSolution.deletePair(pos-1);
+                    ArrayList<int[]> notCon = auxBestSolution.getRoutesNotConected();
+                    auxBestSolution.getI().setNodeMatrix(notCon);
+                    auxSolution.getI().setNodeMatrix(notCon);
+                    
                     ArrayList<Integer> del;
                     for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
                         del = RandomSolution.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution, random);
-                        auxSolution.addRoute(del);
+                        auxSolution.addRoute(del, j);
                         auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del));
                     }
                     
@@ -132,7 +136,6 @@ public class EDP {
             
             auxBestSolution.setNotConn(newNotConn);
             if (auxBestSolution.isBetter(bestSolution)){ 
-                auxBestSolution.getRoutes().addAll(sol.getRoutes());
                 bestSolution = auxBestSolution;
                 
             }
@@ -217,7 +220,9 @@ public class EDP {
                             time = time / 1000; 
                         }
                         s1.setTime(time);
-                        System.out.println("Tiempo empleado: " + time + " s");
+                        //System.out.println(s1.routesToString());
+                        System.out.println("---------------------");
+                        //System.out.println("Tiempo empleado: " + time + " s");
                         writeFile(s1, "salidaRandom.csv");
                     }
             }

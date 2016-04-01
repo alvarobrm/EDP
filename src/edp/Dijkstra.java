@@ -16,7 +16,7 @@ public class Dijkstra {
     
     public static ArrayList<Integer>  Dijkstra(int ini,int fin,  int[][] m, Instance ins, Solution s){
         if (ini== 5000){
-             s.addNotConn();
+             //s.addNotConn();
              return new ArrayList<>();
              
          }
