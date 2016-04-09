@@ -89,10 +89,8 @@ public class Solution {
     public void addRoute(ArrayList<Integer> l){
         routes.add(l);
     }
-    public void addRoute(ArrayList<Integer> l, int pos){
-        ArrayList<Integer> r =routes.get(pos);
-        routes.add(pos, l);
-        routes.remove(r);
+    public void addRoute(ArrayList<Integer> route, int pos){
+        routes.set(pos, route);
     }
 
     @Override
@@ -144,6 +142,7 @@ public class Solution {
             ad[node1][node2]=1;
             ad[node2][node1]=1;
         }
+        this.getRoutes().set(pos, new ArrayList<>());
         this.i.getG().setAdjacent(ad);
         this.i.deletePair(i.getNodeMatrix().get(pos));
         this.conn--;

@@ -69,7 +69,7 @@ public class EDP {
         Solution bestSolution = sol;
       
         int pos = 1;
-
+        int cont =0 ;
         while (pos <= sol.getRoutes().size()) {
             if (sol.isRouteConected(pos - 1)) {
                 Instance auxInstance = new Instance(sol.getI());
@@ -79,14 +79,19 @@ public class EDP {
                 ArrayList<int[]> notCon = auxSolution.getRoutesNotConected();
                 auxSolution.getI().setNodeMatrix(notCon);
                 ArrayList<Integer> del;
-                for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
-                    del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
+                for (int j = 0; j < sol.getI().getNodeMatrix().size(); j++) {
+                    if(sol.getI().getNodeMatrix().get(j)[0]== auxSolution.getI().getNodeMatrix().get(cont)[0]){
+                        del = Dijkstra.Dijkstra(auxInstance.getNodeMatrix().get(cont)[0], auxInstance.getNodeMatrix().get(cont)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution);
+                        if (!del.isEmpty()){
+                            auxSolution.addRoute(del, j);
+                            auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
+                        }
+                        cont ++;
+                    }
                     
-                    auxSolution.addRoute(del, j);
-                    auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del)); // Elimino las aristas usadas
                 }
-                int newNotConn = sol.getNotConn() - auxSolution.getConn()+1;
-                int newConn= sol.getConn() + auxSolution.getConn()-1;
+                int newNotConn = sol.getNotConn() - auxSolution.getConn();
+                int newConn= sol.getConn() + auxSolution.getConn();
                 auxSolution.setConn(newConn);
                 auxSolution.setNotConn(newNotConn);
                 if (auxSolution.isBetter(bestSolution)){
@@ -100,38 +105,43 @@ public class EDP {
         return bestSolution;
     }
 
-    public static Solution localSearchRandom(Solution sol, String graph, String matrix, int rep) {
+    public static Solution localSearchRandom(Solution sol, String graph, String matrix, int rep, MyRandom random) {
         Solution bestSolution = sol;
         int size = bestSolution.getRoutes().size();
         int pos = 1;
         
         while (pos <= size) {
-            MyRandom random = new MyRandom();
             Solution auxBestSolution = new Solution(sol);
             for (int aux = 0; aux < rep; aux++) {
-                if (sol.isRouteConected(pos-1)) {
+                if (sol.isRouteConected(pos-1)) { //TODO: mover el if debajo del while
                     Instance auxInstance = new Instance(sol.getI());
-                    auxInstance.deletePair(auxInstance.getNodeMatrix().get(pos-1));
                     auxBestSolution.setI(auxInstance);
                     Solution auxSolution = new Solution(auxBestSolution);
                     auxSolution.setI(auxInstance);
-                    auxBestSolution.deletePair(pos-1);
+                    auxSolution.deletePair(pos-1);
                     ArrayList<int[]> notCon = auxBestSolution.getRoutesNotConected();
-                    auxBestSolution.getI().setNodeMatrix(notCon);
                     auxSolution.getI().setNodeMatrix(notCon);
-                    
+                    int cont = 0;
                     ArrayList<Integer> del;
-                    for (int j = 0; j < auxInstance.getNodeMatrix().size(); j++) {
-                        del = RandomSolution.Dijkstra(auxInstance.getNodeMatrix().get(j)[0], auxInstance.getNodeMatrix().get(j)[1], auxInstance.getG().getAdjacent(), auxInstance, auxSolution, random);
-                        auxSolution.addRoute(del, j);
-                        auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del));
+                    for (int j = 0; j < sol.getI().getNodeMatrix().size(); j++) {
+                        if (sol.getI().getNodeMatrix().get(j)[0]== auxSolution.getI().getNodeMatrix().get(cont)[0]){
+                            
+                            del = RandomSolution.Dijkstra(cont,auxSolution, random);
+                            if (!del.isEmpty()){
+                                auxSolution.addRoute(del, j);
+                                auxInstance.getG().setAdjacent(Dijkstra.deleteEdges(auxInstance.getG().getAdjacent(), del));
+                            } 
+                            cont++;
+                        }
+                        if (cont >= auxSolution.getI().getNodeMatrix().size())
+                            break;
                     }
                     
                     auxBestSolution = auxSolution.whoIsBetter(auxBestSolution);
                 }
             }
-            int newNotConn =sol.getNotConn()- auxBestSolution.getConn()+1;
-            int newConn = auxBestSolution.getConn()+ sol.getConn()-1;
+            int newNotConn =sol.getNotConn()- auxBestSolution.getConn();
+            int newConn = auxBestSolution.getConn()+ sol.getConn();
             auxBestSolution.setConn(newConn);
             
             auxBestSolution.setNotConn(newNotConn);
@@ -193,9 +203,9 @@ public class EDP {
                     System.out.println("Introduzca el nº de repeticiones");
                     int rep = Integer.parseInt(sn.nextLine());
                     //Ejecutar solucion aleatoria
-                    
+                    MyRandom random = new MyRandom();
                     for (int w = 1; w < 21; w++) {
-                        MyRandom random = new MyRandom();
+                        
                         Solution s1 = new Solution();
                         Instance instance = new Instance(nameGraph, nameMatriz+ w);
                         double time = 0;
@@ -208,19 +218,20 @@ public class EDP {
                             s.setI(solutionInstance);
                             ArrayList<Integer> del;
                             for (int j = 0; j < solutionInstance.getNodeMatrix().size(); j++) {
-                                del = RandomSolution.Dijkstra(solutionInstance.getNodeMatrix().get(j)[0], solutionInstance.getNodeMatrix().get(j)[1], solutionInstance.getG().getAdjacent(), solutionInstance, s, random);
+                                del = RandomSolution.Dijkstra(j,s, random);
                                 s.addRoute(del);
                                 solutionInstance.getG().setAdjacent(Dijkstra.deleteEdges(solutionInstance.getG().getAdjacent(), del));
                             }
                             //Llamada a busqueda local
-                            Solution bestSolution = localSearchRandom(s, nameGraph, nameMatriz+w , rep);
+                            Solution bestSolution = localSearchRandom(s, nameGraph, nameMatriz+w , rep, random);
                             s1 =bestSolution.whoIsBetter(s1);
-                            double end = System.currentTimeMillis();
-                            time = end - start;
-                            time = time / 1000; 
+                            
                         }
+                        double end = System.currentTimeMillis();
+                        time = end - start;
+                        time = time / 1000; 
                         s1.setTime(time);
-                        //System.out.println(s1.routesToString());
+                        System.out.println(s1.routesToString());
                         System.out.println("---------------------");
                         //System.out.println("Tiempo empleado: " + time + " s");
                         writeFile(s1, "salidaRandom.csv");
