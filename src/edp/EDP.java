@@ -3,6 +3,8 @@ package edp;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -112,8 +114,9 @@ public class EDP {
         
         while (pos <= size) {
             Solution auxBestSolution = new Solution(sol);
+            Collections.shuffle(auxBestSolution.getRoutes(), new Random(6));
             for (int aux = 0; aux < rep; aux++) {
-                if (sol.isRouteConected(pos-1)) { //TODO: mover el if debajo del while
+                if (auxBestSolution.isRouteConected(pos-1)) { //TODO: mover el if debajo del while
                     Instance auxInstance = new Instance(sol.getI());
                     auxBestSolution.setI(auxInstance);
                     Solution auxSolution = new Solution(auxBestSolution);
