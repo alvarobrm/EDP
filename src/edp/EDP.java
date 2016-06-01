@@ -140,14 +140,28 @@ public class EDP {
                     auxBestSolution = auxSolution.whoIsBetter(auxBestSolution);
                 }
             }
+            int conn = auxBestSolution.getConn();
             int newNotConn =sol.getNotConn()- auxBestSolution.getConn();
             int newConn = auxBestSolution.getConn()+ sol.getConn();
             auxBestSolution.setConn(newConn);
-            
             auxBestSolution.setNotConn(newNotConn);
-            if (auxBestSolution.isBetter(bestSolution)){ 
-                bestSolution = auxBestSolution;
-                
+            if (conn>=1){
+                ArrayList<int[]> pair = new ArrayList<>();
+                pair.add(sol.getI().getNodeMatrix().get(pos-1));
+                for( int i =0; i<= rep; i++){
+                    Solution aux = new Solution(auxBestSolution);
+                    aux.setI(auxBestSolution.getI());
+                    aux.getI().setNodeMatrix(pair);
+                    ArrayList<Integer> del = RandomSolution.Dijkstra(0,aux, random);
+                    if (!del.isEmpty()){
+                        auxBestSolution.addRoute(del, pos-1);
+                        break;
+                    }
+                }
+            }
+            
+            if (auxBestSolution.isBetter(bestSolution)){   
+                bestSolution = auxBestSolution;    
             }
             pos ++;
             
@@ -160,7 +174,7 @@ public class EDP {
         Scanner sn = new Scanner(System.in);
         String op = "1";
         String nameGraph = "instancias/AS-BA.R-Wax.v100e217.bb";
-        String nameMatriz = "instancias/AS-BA.R-Wax.v100e217.rpairs.10.";
+        String nameMatriz = "instancias/AS-BA.R-Wax.v100e217.rpairs.40.";
         while (op.equals("1") || op.equals("2")) {
             System.out.println("Pulse 1 para Dijkstra y 2 para Aleatoreo. Otro para terminar");
             op = sn.nextLine();
