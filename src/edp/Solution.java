@@ -118,13 +118,15 @@ public class Solution {
     public boolean isBetter (Solution s){
         return (this.getConn()>s.getConn());
     }
+    public boolean isBetterOrEqual (Solution s){
+        return (this.getConn()>=s.getConn());
+    }
  
     public Solution whoIsBetter(Solution s){
         return (this.conn>s.conn)? this: s;
     }
     
     public void mergueRoutes (Solution s){
-        ArrayList<ArrayList<Integer>> r = s.getRoutes();
         for (int i=0; i < this.routes.size(); i++){
             if(this.getRoutes().get(i).size()==0){
                 this.getRoutes().set(i, s.getRoutes().get(i));
@@ -134,8 +136,7 @@ public class Solution {
     
     public void deletePair(int pos){
         ArrayList<Integer> route = this.getRoutes().get(pos);
-        
-         int [][] ad =this.i.getG().getAdjacent();
+        int [][] ad =this.i.getG().getAdjacent();
         for(int i =0 ; i<route.size()-1; i++){
             int node1 = route.get(i);
             int node2 = route.get(i+1);
@@ -144,7 +145,7 @@ public class Solution {
         }
         this.getRoutes().set(pos, new ArrayList<>());
         this.i.getG().setAdjacent(ad);
-        this.i.deletePair(i.getNodeMatrix().get(pos));
+        this.i.deletePair(this.i.getNodeMatrix().get(pos));
         this.conn--;
         this.notConn ++;
     }

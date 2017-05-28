@@ -11,8 +11,8 @@ import java.util.ArrayList;
  *
  * @author Alvaro Berrocal Martin - URJC
  */
-public class RandomSolution {
-     public static ArrayList<Integer>  Dijkstra(int pos,Solution s, MyRandom r){
+public class GraspSolution {
+     public static ArrayList<Integer>  solve(int pos,Solution s, MyRandom r){
         int ini = s.getI().getNodeMatrix().get(pos)[0];
         int fin = s.getI().getNodeMatrix().get(pos)[1];
         int [][] m = s.getI().getG().getAdjacent();
